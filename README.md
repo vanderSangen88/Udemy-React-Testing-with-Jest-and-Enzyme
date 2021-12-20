@@ -215,12 +215,59 @@ test("renders non-empty component without crashing", () => {
 
 ### 21. Removing data-test Attributes for Production
 
+1.
+
 ```
 npm install --save-dev babel-plugin-react-remove-properties
 ```
+
+2.
 
 ```
 npm run eject
 ```
 
-Select yes
+3. Select yes
+
+4. Add plugin to babel-config in package.json
+
+```json
+"env": {
+  "production": {
+    "plugins": [[
+      "react-remove-properties", {
+        "properties": ["data-test"]
+      }
+    ]]
+  }
+},
+```
+
+### 24. Strategies and Design Decisions
+
+#### DRY pros and cons
+
+- DRY = Don't Repeat Yourself
+- Goals for test code not the same as for production code
+- Want failing tests to be easy to diagnose
+- Sometimes this means repeated code
+- Balance between DRY and easily diagnosed tests
+
+#### One expect per test
+
+- Test descriptions provide better documentation
+- Failure counts give better indication of state of code
+  - Test stops at first failure
+- Can use `beforeEach()` for common setup
+
+### 25. Test Initial Counter Display
+
+- Test text displayed on page
+  - Not state value
+  - Testing behavior, not implementation
+- The plan: counter value will be in `<span>`
+- Use Enzyme `.text()`-method
+
+### 26. Don't find too early!
+
+- Elements are unreliable after wrapper has changed

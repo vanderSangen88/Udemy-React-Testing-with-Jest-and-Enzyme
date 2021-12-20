@@ -200,3 +200,27 @@ test("renders non-empty component without crashing", () => {
   - Too easy to ignore failure and update
 - No test intent
   - If there is a failure, does code still meet spec?
+
+### 19. data-test attributes
+
+- data-test attribute to test rendering
+  - top level element of component
+- Not just any component rendered!
+- Why new attribute? Why not id or class?
+  - id and class have uses in production app
+  - Might get changed in future
+  - data-test is only for testing
+  - conventional, but you could choose any name
+- Don't want in production? See future lecture.
+
+### 21. Removing data-test Attributes for Production
+
+```
+npm install --save-dev babel-plugin-react-remove-properties
+```
+
+```
+npm run eject
+```
+
+Select yes

@@ -5,7 +5,18 @@
  * @returns {JSX.Element} - Rendered component (or null if `success` prop is falsy)
  */
 const Congrats = ({ success }) => {
-  return <div />;
+  return (
+    <>
+      {success && (
+        <div data-test="component-congrats">
+          <span data-test="congrats-message">
+            Congratulations! You guessed the word!
+          </span>
+        </div>
+      )}
+      {!success && <div data-test="component-congrats" />}
+    </>
+  );
 };
 
 export default Congrats;

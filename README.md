@@ -201,6 +201,8 @@ test("renders non-empty component without crashing", () => {
 - No test intent
   - If there is a failure, does code still meet spec?
 
+## Section 2: Simple React App: Click Counter
+
 ### 19. data-test attributes
 
 - data-test attribute to test rendering
@@ -271,3 +273,9 @@ npm run eject
 ### 26. Don't find too early!
 
 - Elements are unreliable after wrapper has changed
+
+## Section 3: Jotto Intro and Congrats Component
+
+### 33. Set up Jotto App and Congrats Component
+
+> Jest watchmode will only run files that have updated since the last commit.

@@ -279,3 +279,110 @@ npm run eject
 ### 33. Set up Jotto App and Congrats Component
 
 > Jest watchmode will only run files that have updated since the last commit.
+
+## Section 4: GuessedWords Component
+
+## Section 5: Input Component: useState and state-controlled input field
+
+### 56. Mocking React Methods
+
+#### Method for Mocking Methods in Jest
+
+- Reset properties on React module to replace methods with mocks
+- **no destructuring on imports** in non-test code
+
+Mocking useState ❌
+
+```jsx
+import { useState } from "react";
+
+const [state, setState] = useState();
+```
+
+Mocking useState ✅
+
+```jsx
+import React from "react";
+
+const [state, setState] = React.useState();
+```
+
+### 57. Prepare Input Component for useState Tests
+
+- Local state for Input called "currentGuess" with "useState" hook
+- Update "currentGuess" state on field change (state-controlled)
+
+### 58. State-Controlled Field Tests and Code
+
+```js
+describe("state controlled input field", () => {
+  test("state updates with value of input box upon change", () => {
+    const mockSetCurrentGuess = jest.fn();
+    React.useState = jest.fn(() => ["", mockSetCurrentGuess]);
+
+    const wrapper = setup();
+    const inputBox = findByTestAttr(wrapper, "input-box");
+
+    const mockEvent = { target: { value: "train" } };
+    inputBox.simulate("change", mockEvent);
+
+    expect(mockSetCurrentGuess).toHaveBeenCalledWith("train");
+  });
+});
+```
+
+### 59. Common Questions about Mocking React Methods
+
+- Destructure useState on import
+
+```js
+...
+// mock entire module for destructuring useState on import
+const mockSetCurrentGuess = jest.fn();
+
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useState: (initialState) => [initialState, mockSetCurrentGuess]
+}));
+
+describe("state controlled input field", () => {
+  test("state updates with value of input box upon change", () => {
+    const wrapper = setup();
+    const inputBox = findByTestAttr(wrapper, "input-box");
+
+    const mockEvent = { target: { value: "train" } };
+    inputBox.simulate("change", mockEvent);
+
+    expect(mockSetCurrentGuess).toHaveBeenCalledWith("train");
+  });
+});
+```
+
+- Multiple useState statements?
+  - useReducer (go to 115)
+
+### 60. Clearing State-Controlled Field on Submit
+
+```js
+let mockSetCurrentGuess = jest.fn();
+let wrapper;
+let originalUseState;
+
+beforeEach(() => {
+  mockSetCurrentGuess.mockClear();
+  originalUseState = React.useState;
+  React.useState = jest.fn(() => ["", mockSetCurrentGuess]);
+  wrapper = setup();
+});
+
+afterEach(() => {
+  React.useState = originalUseState;
+});
+
+test("field is cleared upon submit button click", () => {
+  const submitButton = findByTestAttr(wrapper, "submit-button");
+
+  submitButton.simulate("click", { preventDefault() {} });
+  expect(mockSetCurrentGuess).toHaveBeenCalledWith("");
+});
+```

@@ -386,3 +386,7 @@ test("field is cleared upon submit button click", () => {
   expect(mockSetCurrentGuess).toHaveBeenCalledWith("");
 });
 ```
+
+### 61. Testing Input Render for 'success' as 'true' or 'false'
+
+### 62. 'getLetterMatchCount' Helper Function

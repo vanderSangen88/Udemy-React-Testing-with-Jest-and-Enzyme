@@ -390,3 +390,34 @@ test("field is cleared upon submit button click", () => {
 ### 61. Testing Input Render for 'success' as 'true' or 'false'
 
 ### 62. 'getLetterMatchCount' Helper Function
+
+## Section 6: Functional Tests
+
+### 63. Introduction to Functional Tests, and update App Component
+
+They look at a user flow. It's independent of implementation. Can be used for Redux or Context.
+
+### 64. Set up Functional Tests
+
+- True testing of behavior
+- The only change will be in the `setup` function
+- Initial state: props to send to components:
+  - success
+  - secretWord
+  - guessedWords
+
+### 65. First Functional Test: Submit Goes with No Previous Guesses
+
+### 66. Code Quiz! Functional Tests for "Some Words Guessed" and "Correct Guess"
+
+### 67. Jest methods: .only() .skip() and .todo()
+
+- Jest methods on test and describe
+
+- .only: only run test/describe with .only specified
+
+- .skip: don't run any test/describe with .skip specified
+
+- Good for isolating tests or skipping tests
+  - filter out irrelevant tests results until you're ready for them
+  - for tests to remind yourself to write: .todo()

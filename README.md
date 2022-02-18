@@ -421,3 +421,301 @@ They look at a user flow. It's independent of implementation. Can be used for Re
 - Good for isolating tests or skipping tests
   - filter out irrelevant tests results until you're ready for them
   - for tests to remind yourself to write: .todo()
+
+## Section 7: Testing Axios
+
+### 68. 'secretWord' Plan
+
+- getSecretWord in both Context and Redux implementations
+  - Actual function slightly different
+  - Both functions will call `axios`
+- Test code using `moxios` is the same
+- Will fill in individual code in the relevant sections
+
+### 69. 'moxios': Why and How
+
+#### Why moxios?
+
+- Random word server is necessary for actual app
+- Do not want to test server when testing app
+- Using moxios lets us test app
+  - Without testing server
+  - Without even running server
+
+#### How moxios works
+
+- Test installs moxios
+
+  - axios will now send requests to moxios instead of http
+  - Test specifies moxios response
+
+- Test calls action creater
+- Action creater calls axios
+  - axios uses moxios instead of http for request
+- Action creator receives moxios request from axios
+
+#### moxios Syntax
+
+- Test calls moxios.install()
+
+  - Sets moxios as the axios adapter
+  - Routes axios calls to moxios instead of http
+
+- Can pass axios Instance to moxios.install()
+  - Use your configured settings
+
+#### moxios.wait()
+
+- Call moxios.wait() during test
+- Watches for axios calls
+- Sends response using the callback passed to .wait()
+
+```js
+moxios.wait(() => {});
+```
+
+#### Sending a response
+
+- In moxios.wait() callback
+  - Access most recent request
+  - Send response using the callback passed to .wait()
+
+```js
+moxios.wait(() => {
+  const request = moxios.requests.mostRecent();
+  request.responsdWith({
+    status: 200,
+    response: secretWord,
+  });
+});
+```
+
+### 70. Set up `getSecretWord` Action and Tests
+
+1. Run `npm i axios`
+2. Run `npm i -D moxios`
+
+### 71. Testing Async Actions
+
+#### Testing asynchronous functions
+
+- getSecretWord returns promise
+- Put assertion in .then() callback after running getSecretWord()
+  - Assertion will run after promise resolves
+
+#### So Much Asynchronicity!
+
+- moxios.wait() is also asynchronous
+- More important than ever to see tests fail
+- Very easy for tests to complete before async
+
+#### Tests can pass even though assertion fails
+
+- Test function starts async call
+
+  - Exits **before** promise resolves
+
+- Assertion runs after promise resolves
+  - After test has already passed
+
+### 72. Write 'getSecretWord' Action
+
+### 73. Asynchronous Action and Moxios Summary
+
+#### Asynchronous function Testing
+
+- Return getSecretWord() call in test
+  - Test won't finish before promise resolves
+- Call assertion in .then() callback
+  - Won't run until getSecretWord() promise resolves
+- Be careful to see tests fail
+
+#### moxios
+
+- Configure axios adapter to moxios, not http
+- axios sends requests to moxios
+- write moxios response to mimic server response
+
+## Section 8: Get Secret Word on App Mount: Mocking Modules and Testing 'useEffect'
+
+### 74. Mocking Modules with Jest
+
+#### Mocking Modules in Jest
+
+- Before, we mocked pieces of modules individually: React.useState
+- That was done test-file-by-test-file
+
+  - reasonable: sometimes wanted to mock, sometimes didn't
+
+- We are going to want to mock the getSecretWord action everywhere
+
+  - never want to go across the network except maybe for e2e
+
+- For this: mock the module globally
+
+#### Mock files for global mocks
+
+- Global mock file can be used by any tests file
+- Located in directory with special name: "** mocks **"
+- Useful if you want to mock every time (or almost every time)
+- Test file imports from mocks file instead of actual module
+
+#### Location of ** mocks ** folder
+
+- For any node module
+  - At the same level as the node_modules folder
+- For project modules
+  - At the same level as the module
+
+#### Different Behavior for Node Modules
+
+- ** mocks ** file that provide mocks
+  - mocking a node module (for example, 'react')
+    - mocks automatically unless you explicitly unmock
+  - mocking a project module
+    - will not mock unless you explicitly mock
+
+#### Mocking with create-react-app
+
+- Issue with location of node modules
+
+- Mocks reset automatically before each test
+  - a problem if you've specified a return value!
+
+### 75. Using useEffect to Get Secret Word on App Mount
+
+#### useEffect
+
+- React hook that runs function on component reload
+- Be default, runs on every reload
+  - or specify to re-run only when certain value change
+- "re-run when empty array changes" = run only on mount
+  - equivalent of componentDidMount
+
+#### getSecretWord runs on App mount
+
+- Use mount
+  - useEffect not called on shallow
+- Mock module containing getSecretWord
+  - set up global mock to avoid network calls in tests
+- Clear mock using .mockClear()
+  - mock tracks calls cumulatively until reset
+
+#### getSecretWord does not run on App update
+
+- secretWord should not update on App update
+  - evil game -- word changes on every guess
+- Note: not testing that React's useEffect hook works properly
+  - That React's job
+- Testing that we're using it properly
+- Will trigger update with Enzyme setProps()
+  - update() doesn't trigger useEffect()
+    - issue: https://github.com/enzymejs/enzyme/issues/2254
+
+### 76. Mocking the actions Module
+
+### 77. Testing that useEffect is Called on App Mount, Not Called on App Update
+
+### 78. Write useEffect Code to Pass Tests
+
+### 79. Choice point: ~~Redux~~ or React Context
+
+#### Intro to Shared State
+
+- Shared State is used for props needed by lots of components
+  - Global settings (language, visual theme)
+  - Deeply nested components need access but ancesters don't
+
+#### React Context vs. Redux
+
+- Simple apps: Context works great
+- Redux has better tools for more sophisticated apps
+  - optimization for high frequency updates
+  - rich ecosystem for developers
+    - tools for debugging
+  - middleware for automatic code upon any action
+    - for example, logging events to analytics pipelines
+
+#### Note on Artifice
+
+- Jotto too simple to need shared state
+- Only two levels of components
+  - keep state at App level
+  - pass state and setters as props
+- Simple app for learning
+  - shared state is artifical
+
+---
+
+# React Context
+
+## Section 12: React Context Testing Introduction and Update 'getSecretWord'
+
+### 110. Introduction to React Context
+
+#### React Context
+
+- Context is another option for shared state
+
+  - less complicated than Redux
+  - less powerful / fewer tools
+
+- In this course:
+  - Language context
+  - Context for Jotto specific state
+    - e.g. whether the word has been guessed successfully
+
+#### Using a Context
+
+- Components that use a context need to be wrapped in a provider
+- The context value is passed to the provider as a prop
+- Provider will update children when value changes
+  - Value can be local state for parent component
+  - Pattern to embed state into context (custom hook)
+
+### 111. Jotto Data Flow with Context
+
+#### Context Architecture
+
+- App
+
+  - SecretWord state
+  - Language state
+
+  - LanguageProvider
+
+    - LanguagePicker
+
+      - setLanguage prop
+      - languageContext (get)
+
+    - SuccessProvider
+
+      - Congrats
+
+        - languageContext (get)
+        - successContext (get)
+
+      - GuessedWordsProvider
+
+        - Input
+
+          - secretWord prop
+          - successContext (get/set)
+          - languageContext (get)
+          - currentGuess state
+          - guessedWordsContext (get/set)
+
+        - GuessedWords
+          - languageContext (get)
+          - guessedWordsContext (get)
+
+### 112. Jotto Context Plan of Attack
+
+- App, Input, Congrats, GuessedWords components already started
+- Update App to add getSecretWord return value to local state
+- Context using value prop
+  - Language context (using App-level state)
+- Context with embedded state
+  - Success
+  - GuessedWords

@@ -719,3 +719,15 @@ moxios.wait(() => {
 - Context with embedded state
   - Success
   - GuessedWords
+
+### 113. Update 'getSecretWord' Tests for Context Implementation
+
+### 114. Update 'getSecretWord' Code for Context Implementation
+
+### 115. Intro to 'useReducer' Hook
+
+### 116. Refactor App State with 'useReducer' Hook
+
+### 117. Loading Spinner Planning and 'describe.each()'
+
+### 118. Test and Code Loading Spinner

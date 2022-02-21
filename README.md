@@ -726,8 +726,78 @@ moxios.wait(() => {
 
 ### 115. Intro to 'useReducer' Hook
 
+#### App state
+
+- App has more than one item in state
+  - secretWord
+  - language
+
+#### Why not run useState twice?
+
+- Very difficult to test
+- Need to mock `useState` to set state
+- If it runs 2x, test will be brittle
+  - Needs to specify order of return value in mock
+  - Code changes order, tests break (even though code works fine)
+
+#### Why not run useState with object?
+
+- Could run `useState` once, with an object as the state value
+  - Object looks like `{ secretWord, language }`
+- Tricky to create functions to update only one property
+  - For example, `setSecretWord`
+- Need to send state as an argument
+  - make sure other property isn't clobbered
+
+#### useReducer
+
+- `[state, dispatch] = React.useReducer(reducer, initialState)`,
+- `dispatch` function updates state
+  - `dispatch(action) -> reducer(state, action)`
+  - conventionally, `action` is object with 2 properties: `type` and `payload`
+    - Switch on `type`,
+    - Use `payload` to update state
+- Allows to make functions to update a single key (e.g. `setSecretWord`)
+  - Cleaner functions
+  - Don't have to pass `state` as an argument explicitly
+
 ### 116. Refactor App State with 'useReducer' Hook
 
 ### 117. Loading Spinner Planning and 'describe.each()'
+
+#### Loading Spinner Plan
+
+- If secretWord is null
+
+  - App returns div with data-test="spinner"
+
+- If secretWord is not null
+  - App returns div with data-test="component-app"
+
+#### Spinner Test Plan
+
+- mock `useReducer` to set value of secret word
+- `useReducer` returns an array
+  - first item = value of the state
+  - second item = dispatch function
+- mock returns array
+  - first item = desired state value
+  - second item = jest mock (unused in testing)
+
+#### describe.each
+
+- Run tests multiple times with different parameters
+- Same tests for
+  - `secretWord` is `null`, show loading spinner, don't show app
+  - `secretWord` is `"party"`, show app, don't show loading spinner
+- Advantage: can use the same `beforeEach`/`afterEach`
+- Disadvantage: tests can be harder to read (and diagnose)
+
+`describe.each([arguments arrays]) (test name, test function)`
+
+- `describe.each` takes a matrix of arguments (array of arrays)
+- Returns a function that works like describe
+  - Takes test name and test function
+  - Test function takes arguments from argument arrays
 
 ### 118. Test and Code Loading Spinner

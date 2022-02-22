@@ -880,6 +880,50 @@ moxios.wait(() => {
 
 ### 130. Context Test Options
 
+#### 1. mock useContext
+
+- mock return value sets language value
+
+- Pros:
+
+  - Isolated unit test
+    - doesn't rely on other functionality
+    - can use shallow (isolate from child components)
+
+- Cons:
+  - multiple useContexts mocks are dangerous
+    - specify order or return values
+    - very brittle!
+    - not relevant for custom hook / internal state pattern
+
+#### 2. Wrap component in Provider in setup
+
+- set language value with `value` prop
+
+- Pros:
+
+  - closer to actual app
+    - extra functionality (Provider) unlikely to fail
+
+- Cons:
+  - need to use mount
+    - shallow just returns Provider
+    - tests depend on children of component under test
+
+#### Which to use?
+
+- simple app like this: providers in setup and mount
+  - isolation from child components not relevant
+- more complicated app, may be worthwhile to use shallow
+
+#### What to test
+
+- Spot-check one string we don't expect to be removed from app
+  - prove all the writing is in place
+- Only two languages in this app
+  - even if there were more, test default and non-default
+- This is part of the "art" of testing
+
 ### 131. Congrats Language Context Test Setup
 
 ### 132. Congrats Language Context Tests
@@ -891,6 +935,18 @@ moxios.wait(() => {
 ### 135. Fix App Test Language Warnings
 
 ### 136. GuessedWords Language Context Tests: Mocking useContext
+
+#### GuessedWords Component
+
+- Second option for testing mock `useContext`
+  - set language value with `useContext` mock return value
+- `setup` simply uses shallow
+  - can use existing `setup`, no need to update
+- don't want to mock `useContext` for default
+  - let `useContext` run and return default value
+  - can really test default here, unlike Provider pattern
+- Will use `guessInstructions` as string
+  - Need `guessedWords` to be `[]` so guess instructions display
 
 ### 137. GuessedWords Language Context Code
 

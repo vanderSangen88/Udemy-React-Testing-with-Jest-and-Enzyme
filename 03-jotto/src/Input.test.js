@@ -1,15 +1,23 @@
-import { mount, shallow } from "enzyme";
 import React from "react";
+import { mount } from "enzyme";
 import { findByTestAttr, checkProps } from "../test/testUtils";
 
 import Input from "./Input";
 import languageContext from "./contexts/languageContext";
+import successContext from "./contexts/successContext";
+import guessedWordsContext from "./contexts/guessedWordsContext";
+
+// mock entire module for destructuring useState on import //////
+// const mockSetCurrentGuess = jest.fn();
+// jest.mock('react', () => ({
+//   ...jest.requireActual('react'),
+//   useState: (initialState) => [initialState, mockSetCurrentGuess]
+// }))
 
 /**
- * Factory function to create a ShallowWrapper for the Input component.
- * @function setup
- * @param {object} testValues - Context and props values specific to this setup.
- * @returns {ReactWrapper}
+ * create ReactWrapper for Input component for testing
+ * @param {object} testValues - Context and props values for this specific test
+ * @return {ReactWrapper} - Wrapper for Input component and providers
  */
 const setup = ({ language, secretWord, success }) => {
   language = language || "en";
@@ -18,7 +26,11 @@ const setup = ({ language, secretWord, success }) => {
 
   return mount(
     <languageContext.Provider value={language}>
-      <Input success={success} secretWord={secretWord} />
+      <successContext.SuccessProvider value={[success, jest.fn()]}>
+        <guessedWordsContext.GuessedWordsProvider>
+          <Input secretWord={secretWord} />
+        </guessedWordsContext.GuessedWordsProvider>
+      </successContext.SuccessProvider>
     </languageContext.Provider>
   );
 };

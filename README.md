@@ -1002,11 +1002,74 @@ moxios.wait(() => {
 
 ### 146. Test and Code GuessedWords Context in GuessedWords Component
 
+#### guessedWords Context in GuessedWords Component
+
+- Update `setup` function
+  - Use other option: mocking
+    - mock `useGuessedWords`, since that's what determines value
+    - better option if component has lots of nested children (can use shallow)
+    - Mock of wrap in provider in `setup` function
+      - change your mind? Update `setup` function, tests remain unchanged.
+    - Tests don't need to change!
+- Update GuessedWords to get guessedWords value from context
+- Update App
+  - add GuessedWords provider
+  - uncomment GuessedWords component
+
 ### 147. Review of Context with Embedded State
+
+#### Context File
+
+- Use pattern to set up context with embedded state
+- Test that custom hook is un-usable outside provider
+
+#### 1. mock custom hook
+
+- mock return value sets language value
+
+- Pros:
+
+  - Isolated unit test
+    - doesn't rely on other functionality
+    - can use shallow (isolate from child components)
+
+- Cons:
+  - need to export/import context object
+    - otherwise mock won't work
+
+#### 2. Wrap component in Provider in setup
+
+- set value with `value` prop
+
+- Pros:
+
+  - closer to actual app
+    - extra functionality (Provider) unlikely to fail
+
+- Cons:
+  - need to use mount
+    - shallow just returns Provider
+    - tests depend on children of component under test
 
 ### 148. Update Functional Test Setup for Context Implementation
 
 ### 149. Test and Code Input Consuming Success Context
+
+#### Consume and Update Context
+
+- Input will use both elements of `successContext` array value
+  - value of `success` will determine whether to render
+  - update `success` using setter if guess matches secret word
+
+#### Testing Input success
+
+- Setting `success` value
+
+  - guessWord.test.js functional tests
+
+- Consuming `success` value
+  - Input.test.js
+  - set value of `SuccessProvider` in setup
 
 ### 150. Test and Conde Input Setting Success Context
 

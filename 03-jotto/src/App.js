@@ -8,6 +8,8 @@ import LanguagePicker from "./LanguagePicker";
 import { getSecretWord } from "./actions";
 
 import languageContext from "./contexts/languageContext";
+import successContext from "./contexts/successContext";
+import guessedWordsContext from "./contexts/guessedWordsContext";
 
 /**
  * @function reducer to update state, automatically called by dispatch
@@ -34,7 +36,6 @@ function App() {
   });
 
   // TODO: get props from shared state
-  const success = false;
   const guessedWords = [];
 
   const setSecretWord = (secretWord) => {
@@ -67,11 +68,16 @@ function App() {
       {state.secretWord && (
         <div className="container" data-test="component-app">
           <h1>Jotto</h1>
+          <p>The secret word is {state.secretWord}</p>
           <languageContext.Provider value={state.language}>
             <LanguagePicker setLanguage={setLanguage} />
-            <Congrats success={success} />
-            <Input success={success} secretWord={state.secretWord} />
-            <GuessedWords guessedWords={guessedWords} />
+            <guessedWordsContext.GuessedWordsProvider>
+              <successContext.SuccessProvider>
+                <Congrats />
+                <Input secretWord={state.secretWord} />
+              </successContext.SuccessProvider>
+              <GuessedWords />
+            </guessedWordsContext.GuessedWordsProvider>
           </languageContext.Provider>
         </div>
       )}

@@ -801,3 +801,131 @@ moxios.wait(() => {
   - Test function takes arguments from argument arrays
 
 ### 118. Test and Code Loading Spinner
+
+## Section 13: Simple Context: Language Picker
+
+### 119. Context Implementation in this Course
+
+#### Context Caveat
+
+- Context are complicated
+- Implement a few examples here
+- No deep explanations
+  - how contexts work
+  - other uses/application
+
+#### Language Context
+
+- Track selected language and pass to components
+  - determine language for strings
+- Typical context use case
+  - used by many components, deeply nested
+  - tedious / hard-to-maintain to pass via props
+    - nearly every component needs this
+- Context makes value available to all components
+  - without props
+
+#### success and guessedWords Contexts
+
+- success and guessedWords needed by multiple components
+  - don't need context here; no nested components
+  - could use App-level state and pass as props
+- App is so simple, don't need context for anything
+  - using context for practice
+- for these, use pattern that embeds state into context using custom hooks
+
+### 120. Language Context Planning
+
+#### Language Context Plan
+
+- Language value = App-level state
+  - `useReducer()` hook gives value, dispatch function
+- `LanguagePicker` component
+  - pass in `setLanguage` as a prop
+- Create context folder, languageContext.js
+  - Export `languageContext`
+- Use `languageContext` to create Provider in App
+  - Wrap children components in `languageContext.Provider`
+  - Use language state as value
+  - Update children when value changes
+- Import `languageContext` in component files to consume
+  - use `useContext()` hook to access context value
+
+#### Strings File
+
+- strings file contains:
+  - Object with strings in each language (strings "database")
+  - Function that
+    - takes a language code and string key
+    - returns string for that language
+    - if language code / string key isn't represented in object
+      - write warning to console
+      - use default language
+
+### 121. Strings File Setup
+
+### 122. Strings Test
+
+### 123. Code getStringByLanguage
+
+### 124. Strings Warnings
+
+### 125. LanguagePicker Component: Planning and Setup
+
+### 126. LanguagePicker Tests: Render and PropTypes
+
+### 127. LanguagePicker Icons
+
+### 129. languageContext File
+
+### 130. Context Test Options
+
+### 131. Congrats Language Context Test Setup
+
+### 132. Congrats Language Context Tests
+
+### 133. Congrats Language Context Code
+
+### 134. Code Quiz! Input Language Context
+
+### 135. Fix App Test Language Warnings
+
+### 136. GuessedWords Language Context Tests: Mocking useContext
+
+### 137. GuessedWords Language Context Code
+
+### 138. Manual Acceptance Testing
+
+## Section 14: Context with Embedded State
+
+### 139. Context with Embedded State
+
+### 140. Code Success Context
+
+### 141. Test Success Context
+
+### 142. Code Quiz! guessedWords Context
+
+### 143. Set up Congrats and App Components for Success Context Testing
+
+### 144. Test and Code Congrats Success Context
+
+### 145. Set up GuessedWords Component for Context Testing
+
+### 146. Test and Code GuessedWords Context in GuessedWords Component
+
+### 147. Review of Context with Embedded State
+
+### 148. Update Functional Test Setup for Context Implementation
+
+### 149. Test and Code Input Consuming Success Context
+
+### 150. Test and Conde Input Setting Success Context
+
+### 151. Test and Code Input Setting GuessedWords Context
+
+### 152. Fix GuessedWords Provider Error in Input.test.js
+
+### 153. Manual Acceptance Testing
+
+### 154. Jotto Challenges for Hooks and Context

@@ -956,9 +956,41 @@ moxios.wait(() => {
 
 ### 139. Context with Embedded State
 
+#### success Context
+
+- what if context needs to be **set** in a nested component
+
+  - not simply consumed
+
+- pattern with languageContext: App-level state, pass setter as prop
+  - won't avoid "prop-drilling" with deeply-nested setter
+
+#### Context / state / provider / custom hook
+
+- From Kent Dodds blog post
+
+  - https://kentcdodds.com/blog/application-state-management-with-react
+
+- context file:
+  - make context with createContext
+  - make custom hook with useContext
+  - make context provider with internal state via useState:
+    - Provider value is array [state, setState]
+  - export custom hook and provider
+
 ### 140. Code Success Context
 
 ### 141. Test Success Context
+
+#### Testing successContext
+
+- Test that useSuccess throws an error if used outside provider
+  - and doesn't if it's inside provider
+  - anything else is basically testing React functions (not our job!)
+- Make fake functional component and call `useSuccess` inside
+- Use Jest `toThrow()` assertion
+  - takes function as arg
+  - fails the test if function does **not** throw
 
 ### 142. Code Quiz! guessedWords Context
 
